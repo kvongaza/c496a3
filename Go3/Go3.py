@@ -3,7 +3,7 @@ import os, sys
 utilpath = sys.path[0] + "/../util/"
 sys.path.append(utilpath)
 
-from gtp_connection import GtpConnection  
+from gtp_connection_go3 import GtpConnection  
 from board_util import GoBoardUtil
 from simple_board import SimpleGoBoard
 from ucb import runUcb
@@ -45,7 +45,6 @@ def writeMoves(board, moves, count, numSimulations):
 def select_best_move(board, moves, moveWins):
     max_child = np.argmax(moveWins)
     return moves[max_child]
-
 
 class Go3Player(object):
     """
@@ -127,4 +126,5 @@ if __name__=='__main__':
         print('simulations must be random or rulebased')
         sys.exit(0)
     run()
+
 
