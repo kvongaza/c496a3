@@ -86,6 +86,8 @@ class GtpConnection(gtp_connection.GtpConnection):
         opp = GoBoardUtil.opponent(self.board.current_player)
         if self.board._liberty(last_move, opp) == 1:
             cap = self.board._single_liberty(last_move, opp)
+            if GoBoardUtil.filter(self.board, cap, self.board.current_player, True):
+                return False
             board = self.board.copy()
             legal = board.move(cap, self.board.current_player)
             if legal:
@@ -98,7 +100,7 @@ class GtpConnection(gtp_connection.GtpConnection):
         last_move = self.board.last_move
         if last_move is None:
             return False
-        S, E, S_eyes = self.board.find_S_and_E(player)
+        S, _, _ = self.board.find_S_and_E(player)
         moves = []
         for stone in S:
             if self.board._liberty(stone, player) == 1:
@@ -107,6 +109,7 @@ class GtpConnection(gtp_connection.GtpConnection):
                 board.move(defense_p, player)
                 if board._liberty(defense_p, player) > 1:
                     moves.append(defense_p)
+        moves = GoBoardUtil.filter_moves(self.board, moves, True)
         if len(moves) < 1:
             return False
         self.respond('AtariDefense ' + GoBoardUtil.sorted_point_string(moves, self.board.NS))
